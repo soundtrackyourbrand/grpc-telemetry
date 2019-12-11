@@ -10,7 +10,8 @@ defmodule GRPCTelemetry do
     event_prefix
   end
 
-  @spec call(term, term, fun, [atom]) :: term
+  @spec call(GRPC.Server.rpc_req(), GRPC.Server.Stream.t(), GRPC.ServerInterceptor.next(), any) ::
+          GRPC.ServerInterceptor.rpc_return()
   def call(req, stream, next, event_prefix) do
     start_time = System.monotonic_time()
 
