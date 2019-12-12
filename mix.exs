@@ -14,9 +14,13 @@ defmodule GRPCTelemetry.MixProject do
       package: package(),
       dialyzer: [
         plt_file: {:no_warn, "plts/dialyzer.plt"}
-      ]
+      ],
+      elixirc_paths: elixirc_paths(Mix.env())
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   defp package do
     %{
