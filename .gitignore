@@ -22,3 +22,5 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 grpc_telemetry-*.tar
 
+/plts/*.plt
+/plts/*.plt.hash

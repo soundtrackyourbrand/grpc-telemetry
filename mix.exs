@@ -11,7 +11,10 @@ defmodule GRPCTelemetry.MixProject do
       description: @description,
       elixir: "~> 1.9",
       deps: deps(),
-      package: package()
+      package: package(),
+      dialyzer: [
+        plt_file: {:no_warn, "plts/dialyzer.plt"}
+      ]
     ]
   end
 
