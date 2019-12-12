@@ -2,7 +2,7 @@ defmodule GRPCTelemetryTest do
   use ExUnit.Case
   doctest GRPCTelemetry
 
-  test "greets the world" do
-    assert GRPCTelemetry.hello() == :world
+  test "fake test" do
+    assert :fake == :fake
   end
 end
