@@ -16,6 +16,7 @@ jobs:
       script: mix format --check-formatted
     - stage: dialyzer
       script: mix dialyzer
+
 cache:
   directories:
     - plts

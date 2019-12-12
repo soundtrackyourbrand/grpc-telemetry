@@ -1,5 +1,7 @@
 # GRPCTelemetry
 
+[![Build Status](https://travis-ci.org/soundtrackyourbrand/grpc-telemetry.svg?branch=master)](https://travis-ci.org/soundtrackyourbrand/grpc-telemetry)
+
 **TODO: Add description**
 
 ## Installation
