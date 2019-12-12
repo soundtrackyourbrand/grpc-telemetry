@@ -30,7 +30,7 @@ defmodule GRPCTelemetry.MixProject do
 
   defp deps do
     [
-      {:grpc, "~> 0.4", optional: true},
+      {:grpc, ">= 0.0.0", optional: true},
       {:telemetry, "~> 0.4", optional: true}
     ]
   end
