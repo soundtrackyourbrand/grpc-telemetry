@@ -1,4 +1,26 @@
 defmodule GRPCTelemetry do
+  @moduledoc """
+  An interceptor for instrumenting gRPC requests with `:telemetry` events.
+
+  GRPCTelemetry takes one option, the event prefix:
+
+      intercept(GRPCTelemetry, event_prefix: [:my, :endpoint])
+
+  It will emit two events:
+
+      * `[:my, :endpoint, :start]` is emitted the interceptor
+      is called, it contains the monotonic time in native units
+      when the event was emitted, called `time`.
+
+      * `[:my, :endpoint, :stop]` is emitted after the rest
+      of the interceptor chain has executed, and will contains
+      `duration`, the monotonic time difference between the stop
+      and start event, in native units.
+
+  GRPCTelemetry should be added as the first interceptor, so that it
+  instruments the whole request.
+  """
+
   @spec init(event_prefix: [atom]) :: [atom]
   def init(opts) do
     event_prefix = Keyword.get(opts, :event_prefix)
