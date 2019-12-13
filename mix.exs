@@ -1,7 +1,7 @@
 defmodule GRPCTelemetry.MixProject do
   use Mix.Project
 
-  @version "1.0.0"
+  @version "1.0.0-rc.1"
   @description "Telemetry interceptor/middleware for grpc"
 
   def project do
