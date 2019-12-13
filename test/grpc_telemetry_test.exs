@@ -38,8 +38,7 @@ defmodule GRPCTelemetryTest do
     stream = %GRPC.Server.Stream{
       endpoint: Endpoint,
       server: Server,
-      adapter: GRPCTelemetryTest.ServerAdapter,
-      codec: GRPC.Codec.Erlpack
+      adapter: GRPCTelemetryTest.ServerAdapter
     }
 
     assert {:ok, %GRPC.Server.Stream{}, "response"} =

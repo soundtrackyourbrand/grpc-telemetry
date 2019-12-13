@@ -45,7 +45,7 @@ defmodule GRPCTelemetry.MixProject do
 
   defp deps do
     [
-      {:grpc, github: "elixir-grpc/grpc"},
+      {:grpc, "~> 0.4.0-alpha.2"},
       {:telemetry, "~> 0.4"},
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.21", only: :dev}
