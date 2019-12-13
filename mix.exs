@@ -15,7 +15,15 @@ defmodule GRPCTelemetry.MixProject do
       dialyzer: [
         plt_file: {:no_warn, "plts/dialyzer.plt"}
       ],
-      elixirc_paths: elixirc_paths(Mix.env())
+      elixirc_paths: elixirc_paths(Mix.env()),
+      docs: [
+        extras: [
+          "README.md"
+        ],
+        main: "readme",
+        source_ref: "v#{@version}",
+        source_url: "https://github.com/soundtrackyourbrand/grpc-telemetry"
+      ]
     ]
   end
 
@@ -39,7 +47,8 @@ defmodule GRPCTelemetry.MixProject do
     [
       {:grpc, github: "elixir-grpc/grpc"},
       {:telemetry, "~> 0.4"},
-      {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false},
+      {:ex_doc, "~> 0.21", only: :dev}
     ]
   end
 end
