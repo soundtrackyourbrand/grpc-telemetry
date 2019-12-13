@@ -10,7 +10,7 @@ Add as a dependency in your `mix.exs`:
 ```elixir
 def deps do
   [
-    {:grpc_telemetry, "~> 1.0.0-rc.1"}
+    {:grpc_telemetry, "1.0.0-rc.1"}
   ]
 end
 ```
