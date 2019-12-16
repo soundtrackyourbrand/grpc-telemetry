@@ -16,6 +16,24 @@ defmodule GRPCTelemetryTest do
     run(Server)
   end
 
+  defmodule EndpointRaiseError do
+    use GRPC.Endpoint
+
+    intercept(GRPCTelemetry, event_prefix: [:my, :prefix])
+    intercept(GRPCTelemetryTest.Interceptors.RaiseError)
+
+    run(Server)
+  end
+
+  defmodule EndpointReturnError do
+    use GRPC.Endpoint
+
+    intercept(GRPCTelemetry, event_prefix: [:my, :prefix])
+    intercept(GRPCTelemetryTest.Interceptors.ReturnError)
+
+    run(Server)
+  end
+
   setup do
     start_handler_id = {:start, :rand.uniform(100)}
     stop_handler_id = {:stop, :rand.uniform(100)}
@@ -61,6 +79,56 @@ defmodule GRPCTelemetryTest do
     assert %{headers: %{"header" => "value"}} = metadata
     assert %{status_code: 0} = metadata
     assert %{status_message: "OK"} = metadata
+  end
+
+  test "emits correct status and message on raised error", %{
+    start_handler: start_handler,
+    stop_handler: stop_handler
+  } do
+    attach(start_handler, [:my, :prefix, :start])
+    attach(stop_handler, [:my, :prefix, :stop])
+
+    stream = %GRPC.Server.Stream{
+      endpoint: EndpointRaiseError,
+      server: Server,
+      adapter: GRPCTelemetryTest.ServerAdapter
+    }
+
+    assert_raise(GRPC.RPCError, fn ->
+      Server.__call_rpc__("/helloworld.Greeter/SayHello", stream)
+    end)
+
+    assert_received {:event, [:my, :prefix, :start], measurements, metadata}
+    assert map_size(measurements) == 1
+
+    assert_received {:event, [:my, :prefix, :stop], measurements, metadata}
+    assert map_size(measurements) == 1
+    assert %{status_code: 13} = metadata
+    assert %{status_message: "Internal errors"} = metadata
+  end
+
+  test "emits correct status and message on return error", %{
+    start_handler: start_handler,
+    stop_handler: stop_handler
+  } do
+    attach(start_handler, [:my, :prefix, :start])
+    attach(stop_handler, [:my, :prefix, :stop])
+
+    stream = %GRPC.Server.Stream{
+      endpoint: EndpointReturnError,
+      server: Server,
+      adapter: GRPCTelemetryTest.ServerAdapter
+    }
+
+    assert {:error, _} = Server.__call_rpc__("/helloworld.Greeter/SayHello", stream)
+
+    assert_received {:event, [:my, :prefix, :start], measurements, metadata}
+    assert map_size(measurements) == 1
+
+    assert_received {:event, [:my, :prefix, :stop], measurements, metadata}
+    assert map_size(measurements) == 1
+    assert %{status_code: 13} = metadata
+    assert %{status_message: "Internal errors"} = metadata
   end
 
   defp attach(handler_id, event) do
