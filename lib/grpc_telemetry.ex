@@ -46,7 +46,13 @@ defmodule GRPCTelemetry do
     try do
       rpc_return = next.(req, stream)
 
-      execute_stop(event_prefix, stream, start_time)
+      err =
+        case rpc_return do
+          {:error, %GRPC.RPCError{} = rpc_error} -> rpc_error
+          _ -> nil
+        end
+
+      execute_stop(event_prefix, stream, start_time, err)
 
       rpc_return
     rescue
@@ -56,7 +62,7 @@ defmodule GRPCTelemetry do
     end
   end
 
-  defp execute_stop(event_prefix, stream, start_time, error \\ nil) do
+  defp execute_stop(event_prefix, stream, start_time, error) do
     {status_code, status_message} =
       case error do
         %GRPC.RPCError{status: s, message: m} -> {s, m}
